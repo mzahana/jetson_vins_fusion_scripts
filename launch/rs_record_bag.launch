@@ -1,0 +1,15 @@
+<launch>
+  <!-- Records infrared and imu topics of the D435i Realsense camera -->
+
+  <arg name="topics" default="/camera/infra1/image_rect_raw_throttle /camera/infra2/image_rect_raw_throttle /camera/imu"/>
+  <arg name="bag_path" default="/root/shared_volume/d435i_bag.bag"/>
+  <arg name="max_duration_minutes" default="15m"/>
+
+  <!-- throttle image topics -->
+  <node name="img_throttle1" pkg="topic_tools" type="throttle" args="messages /camera/infra1/image_rect_raw 10.0"/>
+  <node name="img_throttle2" pkg="topic_tools" type="throttle" args="messages /camera/infra2/image_rect_raw 10.0"/>
+
+  <!-- Record -->
+  <node name="rosbag_record" pkg="rosbag" type="record" args="-o $(arg bag_path) --duration=$(arg max_duration_minutes) $(arg topics)"/>
+
+</launch>
